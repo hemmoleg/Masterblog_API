@@ -1,0 +1,190 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Masterblog_API",
+    "version": "1.0.0"
+  },
+  "servers": [{ "url": "http://localhost:5001" }],
+  "tags": [{ "name": "Post", "description": "Post API - CRUD" }],
+  "paths": {
+        "/api/posts": {
+          "get": {
+            "summary": "Returns all posts",
+            "produces": [
+              "application/json"
+            ],
+            "tags": [
+              "Post"
+            ],
+            "responses": {
+              "200": {
+                "description": "Successful operation"
+              }
+            }
+          },
+          "post": {
+          "summary": "Add a new blog post",
+          "consumes": ["application/x-www-form-urlencoded"],
+          "produces": ["application/json"],
+          "tags": ["Post"],
+          "parameters": [
+            {
+              "name": "title",
+              "in": "formData",
+              "description": "The title of the post",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "content",
+              "in": "formData",
+              "description": "The content of the post",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Post successfully created"
+            },
+            "400": {
+              "description": "Missing title or content"
+            }
+          }
+        },
+          "delete": {
+            "summary": "Delete a post by ID",
+            "description": "Deletes the post with the given ID if it exists.",
+            "produces": ["application/json"],
+            "tags": ["Post"],
+            "parameters": [
+              {
+                "name": "post_id",
+                "in": "path",
+                "description": "ID of the post to delete",
+                "required": true,
+                "type": "integer",
+                "format": "int64"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Post successfully deleted",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "404": {
+                "description": "Post not found",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "put": {
+            "summary": "Update a post by ID",
+            "description": "Updates the title and content of an existing post.",
+            "consumes": ["application/x-www-form-urlencoded"],
+            "produces": ["application/json"],
+            "tags": ["Post"],
+            "parameters": [
+              {
+                "name": "post_id",
+                "in": "path",
+                "description": "ID of the post to update",
+                "required": true,
+                "type": "integer",
+                "format": "int64"
+              },
+              {
+                "name": "title",
+                "in": "formData",
+                "description": "New title for the post",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "content",
+                "in": "formData",
+                "description": "New content for the post",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Post successfully updated",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "title": { "type": "string" },
+                    "content": { "type": "string" }
+                  }
+                }
+              },
+              "400": {
+                "description": "Missing title/content or post not found",
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/api/posts/search": {
+          "get": {
+            "summary": "Search posts by title and/or content",
+            "description": "Returns posts that match the given title and/or content query parameters. If neither is provided, an empty list is returned.",
+            "produces": ["application/json"],
+            "tags": ["Post"],
+            "parameters": [
+              {
+                "name": "title",
+                "in": "query",
+                "description": "Filter posts by title (case-insensitive, partial match)",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "name": "content",
+                "in": "query",
+                "description": "Filter posts by content (case-insensitive, partial match)",
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "List of posts matching the search criteria",
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "title": { "type": "string" },
+                      "content": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    }
+}
