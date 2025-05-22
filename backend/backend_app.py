@@ -49,8 +49,14 @@ def get_posts():
 
 @app.route('/api/posts', methods=['POST'])
 def add_post():
-    title = request.form.get('title')
-    content = request.form.get('content')
+    data = request.get_json(silent=True)
+    print(data)
+    if data:
+        title = data.get('title')
+        content = data.get('content')
+    else:
+        title = request.form.get('title')
+        content = request.form.get('content')
 
     if title is None:
         return jsonify({'error': 'title is None'}), 400
@@ -86,8 +92,14 @@ def delete(post_id):
 
 @app.route('/api/posts/<int:post_id>', methods=['PUT'])
 def update(post_id):
-    title = request.form['title']
-    content = request.form['content']
+    data = request.get_json(silent=True)
+    print(data)
+    if data:
+        title = data.get('title')
+        content = data.get('content')
+    else:
+        title = request.form.get('title')
+        content = request.form.get('content')
 
     if title is None:
         return jsonify({'error': 'title is None'}), 400
